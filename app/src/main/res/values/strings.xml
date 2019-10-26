@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">Uroflowmetry</string>
+    <string name="cannot_connect_camera">Can not connect the camera</string>
+    <string name="tips">Hold card here.\nIt will scan actomatically.</string>
+    <string name="camera_disabled">disabled the camera</string>
+</resources>

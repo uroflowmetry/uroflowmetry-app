@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    android:background="@color/white"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <RelativeLayout
+        android:layout_margin="@dimen/dip_30"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:text="Add your bottle volume"
+                android:layout_gravity="center_horizontal"
+                android:textSize="@dimen/sp_20"
+                android:textStyle="bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:ignore="HardcodedText" />
+            <LinearLayout
+                android:layout_marginTop="@dimen/dip_20"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dip_50">
+                <EditText
+                    android:id="@+id/etAddVolume"
+                    android:hint="volume"
+                    android:imeOptions="actionDone"
+                    android:inputType="number"
+                    android:textColorHint="@color/gray"
+                    android:layout_width="@dimen/dip_100"
+                    android:layout_height="match_parent"
+                    tools:ignore="HardcodedText" />
+                <TextView
+                    android:text="ML"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:ignore="HardcodedText" />
+                <Space
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"/>
+                <TextView
+                    android:id="@+id/btnAutoMeasure"
+                    android:layout_marginStart="@dimen/dip_10"
+                    android:text="(or Auto measure)"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/dark_green"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    tools:ignore="HardcodedText" />
+            </LinearLayout>
+            <TextView
+                android:id="@+id/btnSave"
+                android:text="Save"
+                android:paddingTop="@dimen/dip_5"
+                android:paddingBottom="@dimen/dip_5"
+                android:paddingStart="@dimen/dip_20"
+                android:paddingEnd="@dimen/dip_20"
+                android:background="@color/navy_blue"
+                android:textColor="@color/white"
+                android:layout_gravity="end"
+                android:layout_marginTop="@dimen/dip_20"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:ignore="HardcodedText" />
+        </LinearLayout>
+    </RelativeLayout>
+</RelativeLayout>

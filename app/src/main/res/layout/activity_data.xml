@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/bg_start"
+    tools:context=".activities.DataActivity">
+    <RelativeLayout
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dip_50">
+        <ImageView
+            android:tint="@color/black"
+            android:id="@+id/btnBack"
+            android:src="@drawable/ic_arrow_back_white_24px"
+            android:padding="@dimen/dip_10"
+            android:layout_width="@dimen/dip_50"
+            android:layout_height="match_parent"/>
+        <TextView
+            android:layout_centerInParent="true"
+            android:textSize="@dimen/sp_20"
+            android:text="Data Centre"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:ignore="HardcodedText" />
+    </RelativeLayout>
+    <LinearLayout
+        android:layout_margin="@dimen/dip_10"
+        android:padding="@dimen/dip_10"
+        android:background="@drawable/background_rounded_white"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+        <LinearLayout
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dip_50">
+            <me.grantland.widget.AutofitTextView
+                android:gravity="center"
+                android:text="Time"
+                android:maxLines="2"
+                android:paddingStart="@dimen/dip_5"
+                android:paddingEnd="@dimen/dip_5"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                tools:ignore="HardcodedText" />
+            <me.grantland.widget.AutofitTextView
+                android:gravity="center"
+                android:text="Measured Volume(ml)"
+                android:maxLines="2"
+                android:paddingStart="@dimen/dip_5"
+                android:paddingEnd="@dimen/dip_5"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                tools:ignore="HardcodedText" />
+            <me.grantland.widget.AutofitTextView
+                android:gravity="center"
+                android:text="Measured duration(s)"
+                android:maxLines="2"
+                android:paddingStart="@dimen/dip_5"
+                android:paddingEnd="@dimen/dip_5"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                tools:ignore="HardcodedText" />
+            <me.grantland.widget.AutofitTextView
+                android:gravity="center"
+                android:text="Flow rate"
+                android:maxLines="2"
+                android:paddingStart="@dimen/dip_5"
+                android:paddingEnd="@dimen/dip_5"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                tools:ignore="HardcodedText" />
+        </LinearLayout>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/dataList"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            />
+    </LinearLayout>
+
+    <com.github.mikephil.charting.charts.LineChart
+        android:id="@+id/dataChart"
+        android:layout_margin="@dimen/dip_20"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dip_200"/>
+</LinearLayout>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<item type="id" name="TAG_ONLINE_ID"/>
+	<item type="id" name="TAG_POST"/>
+	<item type="id" name="TAG_QUESTION"/>
+	<item type="id" name="TAG_COMMENT"/>
+	<item type="id" name="TAG_AID"/>
+	<item type="id" name="TAG_POSITION"/>
+</resources>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/bg_start"
+    tools:context=".activities.VolumeActivity">
+    <RelativeLayout
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dip_50">
+        <ImageView
+            android:tint="@color/black"
+            android:id="@+id/btnBack"
+            android:src="@drawable/ic_arrow_back_white_24px"
+            android:padding="@dimen/dip_10"
+            android:layout_width="@dimen/dip_50"
+            android:layout_height="match_parent"/>
+        <TextView
+            android:layout_centerInParent="true"
+            android:textSize="@dimen/sp_20"
+            android:text="Select volume of your bottle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:ignore="HardcodedText" />
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_margin="@dimen/dip_10"
+        android:padding="@dimen/dip_10"
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="0dp">
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/volumeList"
+            android:background="@drawable/background_rounded_white"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </RelativeLayout>
+    <ImageView
+        android:id="@+id/btnAddVolume"
+        android:layout_gravity="end"
+        android:src="@drawable/ic_add_box_black_24px"
+        android:layout_width="@dimen/dip_50"
+        android:layout_height="@dimen/dip_50"/>
+</LinearLayout>

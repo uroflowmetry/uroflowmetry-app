@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <TextView
+        android:id="@+id/volumeViewer"
+        android:layout_margin="@dimen/dip_5"
+        android:background="@drawable/background_rounded_outline_green"
+        android:layout_width="match_parent"
+        android:text="500ML"
+        android:textColor="@color/dark_green"
+        android:gravity="center"
+        android:textSize="@dimen/sp_20"
+        android:layout_height="@dimen/dip_50"
+        tools:ignore="HardcodedText" />
+</RelativeLayout>

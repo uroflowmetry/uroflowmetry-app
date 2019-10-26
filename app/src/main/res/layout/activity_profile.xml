@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_start"
+    tools:context=".activities.ProfileActivity">
+    <RelativeLayout
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dip_50">
+        <ImageView
+            android:tint="@color/black"
+            android:id="@+id/btnBack"
+            android:src="@drawable/ic_arrow_back_white_24px"
+            android:padding="@dimen/dip_10"
+            android:layout_width="@dimen/dip_50"
+            android:layout_height="match_parent"/>
+        <TextView
+            android:layout_centerInParent="true"
+            android:textSize="@dimen/sp_20"
+            android:text="Profile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:ignore="HardcodedText" />
+    </RelativeLayout>
+    <LinearLayout
+        android:background="@drawable/background_rounded_white"
+        android:layout_margin="@dimen/dip_10"
+        android:padding="@dimen/dip_10"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dip_50">
+            <ImageView
+                android:src="@drawable/ic_email_white_24px"
+                android:tint="@color/blue"
+                android:layout_width="@dimen/dip_30"
+                android:layout_height="match_parent"/>
+            <TextView
+                android:layout_marginStart="@dimen/dip_10"
+                android:textColor="@color/black"
+                android:text="My Email"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                tools:ignore="HardcodedText" />
+            <EditText
+                android:imeOptions="actionDone"
+                android:id="@+id/etMyEmail"
+                android:layout_marginEnd="@dimen/dip_10"
+                android:gravity="end"
+                android:inputType="textEmailAddress"
+                android:hint="your email"
+                android:textSize="@dimen/sp_13"
+                android:background="@color/transparent"
+                android:textColorHint="@color/gray"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                tools:ignore="HardcodedText" />
+            <TextView
+                android:id="@+id/btnSaveMyEmail"
+                android:text="Save"
+                android:textStyle="bold"
+                android:textColor="@color/dark_green"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:ignore="HardcodedText" />
+        </LinearLayout>
+        <View
+            android:background="@color/light_gray"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dip_1"/>
+        <LinearLayout
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dip_50">
+            <ImageView
+                android:src="@drawable/ic_doctor"
+                android:layout_width="@dimen/dip_30"
+                android:layout_height="match_parent"/>
+            <TextView
+                android:layout_marginStart="@dimen/dip_10"
+                android:textColor="@color/black"
+                android:text="Doctor Email"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                tools:ignore="HardcodedText" />
+            <EditText
+                android:id="@+id/etDoctorEmail"
+                android:imeOptions="actionDone"
+                android:gravity="end"
+                android:layout_marginEnd="@dimen/dip_10"
+                android:inputType="textEmailAddress"
+                android:hint="doctor email"
+                android:textSize="@dimen/sp_13"
+                android:background="@color/transparent"
+                android:textColorHint="@color/gray"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                tools:ignore="HardcodedText" />
+            <TextView
+                android:id="@+id/btnSaveDoctorEmail"
+                android:text="Save"
+                android:textStyle="bold"
+                android:textColor="@color/dark_green"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:ignore="HardcodedText" />
+        </LinearLayout>
+        <View
+            android:background="@color/light_gray"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dip_1"/>
+        <LinearLayout
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dip_50">
+            <ImageView
+                android:src="@drawable/ic_volume"
+                android:layout_width="@dimen/dip_30"
+                android:layout_height="match_parent"/>
+            <TextView
+                android:layout_marginStart="@dimen/dip_10"
+                android:textColor="@color/black"
+                android:text="Volume of Bottle"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                tools:ignore="HardcodedText" />
+            <TextView
+                android:id="@+id/volumeViewer"
+                android:gravity="end"
+                android:layout_marginEnd="@dimen/dip_10"
+                android:text="1000ML"
+                android:textColor="@color/gray"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                tools:ignore="HardcodedText" />
+            <ImageView
+                android:id="@+id/btnEditVolume"
+                android:src="@drawable/ic_arrow_forward_white_24px"
+                android:tint="@color/dark_green"
+                android:layout_width="@dimen/dip_30"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>
