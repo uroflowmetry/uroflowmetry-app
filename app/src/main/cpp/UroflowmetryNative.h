@@ -7,7 +7,6 @@
 #include <cmath>
 #include <vector>
 
-#ifndef MFC_VERSION
 #include <jni.h>
 
 #ifdef __cplusplus
@@ -23,10 +22,3 @@ JNIEXPORT jboolean JNICALL Java_com_uroflowmetry_engine_EngineUroflowmetry_ProcF
 #ifdef __cplusplus
 }
 #endif //__cplusplus
-
-#else
-
-extern  bool UroflowmetryNative_ProcFrame(unsigned char* pbyImgData, int w, int h, int* pRectData, int crop_l, int crop_t, int crop_r, int crop_b);
-
-#endif
-

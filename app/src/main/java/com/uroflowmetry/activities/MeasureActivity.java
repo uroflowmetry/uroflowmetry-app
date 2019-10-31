@@ -45,7 +45,6 @@ import com.uroflowmetry.library.widget.DrawView;
 import com.uroflowmetry.models.AppStorage;
 import com.uroflowmetry.models.BottleModel;
 import com.uroflowmetry.models.DataModel;
-import com.uroflowmetry.models.RectangleModel;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -177,15 +176,15 @@ public abstract class MeasureActivity extends BaseActivity {
 
         _ratio = ratio;
 
-        RectangleModel rtBorder = new RectangleModel();
+        RectF rtBorder = new RectF();
         _cropL = this._viewW / 6;
         _cropT = this._viewH / 6;
         _cropR = 5 * this._viewW / 6;
         _cropB = 5 * this._viewH / 6;
-        rtBorder.setLeft(_cropL);
-        rtBorder.setTop(_cropT);
-        rtBorder.setRight(_cropR);
-        rtBorder.setBottom(_cropB);
+        rtBorder.left = _cropL;
+        rtBorder.top = _cropT;
+        rtBorder.right = _cropR;
+        rtBorder.bottom = _cropB;
         drawView.drawFilledBorder(rtBorder);
 
         final float textSizePx =
@@ -365,16 +364,16 @@ public abstract class MeasureActivity extends BaseActivity {
 
                             if (bRet)
                             {
-                                RectangleModel rtModel = new RectangleModel();
+                                RectF rtModel = new RectF();
 
                                 int left = (int)(position[0] * _ratio[0]);
                                 int top = (int)(position[1] * _ratio[1]);
                                 int right = (int)(position[2] * _ratio[0]);
                                 int bottom = (int)(position[3] * _ratio[1]);
-                                rtModel.setLeft(left);
-                                rtModel.setTop(top);
-                                rtModel.setRight(right);
-                                rtModel.setBottom(bottom);
+                                rtModel.left = left;
+                                rtModel.top = top;
+                                rtModel.right = right;
+                                rtModel.bottom = bottom;
 
                                 runOnUiThread(() -> drawView.drawDesireArea(rtModel));
 
@@ -416,7 +415,6 @@ public abstract class MeasureActivity extends BaseActivity {
         }
     }
 
-    public abstract byte[] getDataFrame();
     public abstract Bitmap getBitmapFrame();
     public abstract Bitmap getBitmapSource();
 }

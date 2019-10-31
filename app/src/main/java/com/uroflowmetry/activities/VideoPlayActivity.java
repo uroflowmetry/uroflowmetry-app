@@ -120,11 +120,6 @@ public class VideoPlayActivity extends MeasureActivity {
     }
 
     @Override
-    public byte[] getDataFrame() {
-        if( _bmpFrame == null ) return null;
-        return EngineUroflowmetry.GetByteImageData(_bmpFrame, _bmpFrame.getWidth(), _bmpFrame.getHeight());
-    }
-    @Override
     public Bitmap getBitmapSource() {
         _bmpFrame = videoView.getBitmap();
         return _bmpFrame;

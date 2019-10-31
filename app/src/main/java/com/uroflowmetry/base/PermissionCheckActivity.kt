@@ -1,9 +1,8 @@
-package com.itikarus.hat
+package com.uroflowmetry.base
 
 import android.content.pm.PackageManager
 import android.os.Build
 import androidx.core.app.ActivityCompat
-import com.uroflowmetry.base.BaseActivity
 import com.uroflowmetry.showShortToast
 import java.util.HashMap
 

@@ -29,9 +29,6 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 
-//import android.support.v4.app.ActivityCompat;
-//import android.support.v4.content.ContextCompat;
-
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
@@ -57,6 +54,7 @@ import com.uroflowmetry.engine.EngineUroflowmetry;
 import com.uroflowmetry.library.utils.ImageUtils;
 
 
+@SuppressWarnings("ALL")
 public class CameraActivity extends MeasureActivity implements
 		SurfaceHolder.Callback, Camera.PreviewCallback, Camera.ShutterCallback,
 		Camera.PictureCallback, Listener, OnTouchListener
@@ -87,9 +85,6 @@ public class CameraActivity extends MeasureActivity implements
 	private boolean mFirstTimeInitialized;
 	private int mSurfaceW = 0;
 	private int mSurfaceH = 0;
-
-	private static final int mPreviewWidth = 1280;//640;
-	private static final int mPreviewHeight = 960;//480;
 
 	private static final int FIRST_TIME_INIT = 2;
 	private static final int CLEAR_SCREEN_DELAY = 3;
@@ -170,9 +165,6 @@ public class CameraActivity extends MeasureActivity implements
 		if (mOpenCameraFail || mCameraDisabled)
 			return;
 
-		// if (mRecogService != null && mRecogService.isProcessing())
-		// showProgress(null);
-
 		mPausing = false;
 
 		// Start the preview if it is not started.
@@ -195,8 +187,6 @@ public class CameraActivity extends MeasureActivity implements
 			// message queue.
 			if (!mFirstTimeInitialized) {
 				mHandler.sendEmptyMessage(FIRST_TIME_INIT);
-			} else {
-				initializeSecondTime();
 			}
 		}
 
@@ -251,19 +241,10 @@ public class CameraActivity extends MeasureActivity implements
 		if (mFirstTimeInitialized)
 			return;
 
-//		mOrientationListener = new MyOrientationEventListener(this);
-//		mOrientationListener.enable();
-
 		mCameraId = CameraHolder.instance().getBackCameraId();
 
 		CameraUtil.initializeScreenBrightness(getWindow(), getContentResolver());
 		mFirstTimeInitialized = true;
-	}
-
-	// If the activity is paused and resumed, this method will be called in
-	// onResume.
-	private void initializeSecondTime() {
-		//mOrientationListener.enable();
 	}
 
 	// If the Camera is idle, update the parameters immediately, otherwise
@@ -409,9 +390,7 @@ public class CameraActivity extends MeasureActivity implements
 							1);
 				}
 			}
-			else
-			{
-
+			else{
 			}
 
 		} else{
@@ -616,10 +595,6 @@ public class CameraActivity extends MeasureActivity implements
 			mParameters = mCameraDevice.getParameters();
 			Camera.Size size = mParameters.getPictureSize();
 
-//			String previewSize = "";
-//			previewSize = " Camera = [" + size.width + "x" + size.height + "]" + "\n" + " Surface = [" + mSurfaceW + "x" + mSurfaceH + "]";
-//			mPreviewSizeView.setText(previewSize);
-
 			startPreview();
 		} catch (Exception e) {
 			Log.d(TAG, "Error starting camera preview: " + e.getMessage());
@@ -638,17 +613,6 @@ public class CameraActivity extends MeasureActivity implements
 		mSurfaceH = height;
 		Log.d("Surface : ", " ============ width : ===========" + mSurfaceW );
 		Log.d("Surface : ", " ============ height : ===========" + mSurfaceH );
-
-//		String previewSize = "";
-//		previewSize = " Camera = [" + mCamW + "x" + mCamH + "]" + "\n" + " Surface = [" + mSurfaceW + "x" + mSurfaceH + "]";
-//		mPreviewSizeView.setText(previewSize);
-
-//		if( mCamW != 0 && mCamH != 0 ){
-//
-//			width = mCamW * height / mCamH;
-//
-//			holder.setFixedSize(width, height);
-//		}
 
 		// We need to save the holder for later use, even when the mCameraDevice
 		// is null. This could happen if onResume() is invoked after this
@@ -703,7 +667,6 @@ public class CameraActivity extends MeasureActivity implements
 		if (!mFirstTimeInitialized) {
 			mHandler.sendEmptyMessage(FIRST_TIME_INIT);
 		} else {
-			initializeSecondTime();
 		}
 	}
 
@@ -885,7 +848,6 @@ public class CameraActivity extends MeasureActivity implements
 	@Override
 	public void autoFocus() {
 		// TODO Auto-generated method stub
-
 		/*
 		if(FocusManager.isSupported(Parameters.FOCUS_MODE_AUTO, mParameters.getSupportedFocusModes()))
 		{
@@ -953,9 +915,6 @@ public class CameraActivity extends MeasureActivity implements
 			 autoFocus();
 		 }
 
-		//
-		//return mFocusManager.onTouch(e);
-
 		return true;
 	}
 
@@ -981,8 +940,6 @@ public class CameraActivity extends MeasureActivity implements
 	{
 		if(mCameraDevice == null) return;
 
-		//Camera.Parameters cameraParams = mCameraDevice.getParameters();
-
 		if(mParameters.getFlashMode().equals(Parameters.FLASH_MODE_OFF))
 		//if(bOn)
 		{
@@ -1007,12 +964,6 @@ public class CameraActivity extends MeasureActivity implements
 		Matrix matrix = new Matrix();
 		matrix.postRotate(angle);
 		return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, true);
-	}
-
-	@Override
-	public byte[] getDataFrame() {
-		if( _bmpFrame == null ) return null;
-		return EngineUroflowmetry.GetByteImageData(_bmpFrame, _bmpFrame.getWidth(), _bmpFrame.getHeight());
 	}
 
 	@Override

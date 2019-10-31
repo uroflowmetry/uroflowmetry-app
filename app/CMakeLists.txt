@@ -33,8 +33,6 @@ find_library( # Sets the name of the path variable.
 find_library(jnigraphics-lib
         jnigraphics)
 
-
-
 target_link_libraries( # Specifies the target library.
             EngineUroflowmetry
             lib_opencv

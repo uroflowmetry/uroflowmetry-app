@@ -6,9 +6,7 @@ import android.graphics.Color;
 import android.graphics.DashPathEffect;
 import android.graphics.Matrix;
 import android.graphics.Paint;
-import android.graphics.Path;
 import android.graphics.RectF;
-import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.AttributeSet;
@@ -21,7 +19,6 @@ import androidx.core.content.ContextCompat;
 import com.uroflowmetry.R;
 import com.uroflowmetry.bottledetect.tflite.Classifier;
 import com.uroflowmetry.library.utils.ImageUtils;
-import com.uroflowmetry.models.RectangleModel;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -31,12 +28,12 @@ public class DrawView extends View {
 
     Context mContext;
     private Paint paint;
-    private RectangleModel rectangleModel;
+    private RectF rectangleModel;
 
     int textX, textY;
     private int offBorder = 50;
     private Paint paintBorder;
-    private RectangleModel rtBorder;
+    private RectF rtBorder;
 
     //Bottle Setting
     private final List<TrackedRecognition> trackedObjects = new LinkedList<TrackedRecognition>();
@@ -107,10 +104,10 @@ public class DrawView extends View {
         super.onDraw(canvas);
 
         if(rtBorder != null){
-            float x0 = (float)rtBorder.getLeft();
-            float y0 = (float)rtBorder.getTop();
-            float x1 = (float)rtBorder.getRight();
-            float y1 = (float)rtBorder.getBottom();
+            float x0 = rtBorder.left;
+            float y0 = rtBorder.top;
+            float x1 = rtBorder.right;
+            float y1 = rtBorder.bottom;
             canvas.drawLine(x0, y0,  x0 + offBorder, y0, paintBorder);
             canvas.drawLine(x0, y0,  x0, y0 + offBorder, paintBorder);
 
@@ -128,7 +125,7 @@ public class DrawView extends View {
             textX = getWidth() / 2;
             textY = getHeight() / 2;
 
-            canvas.drawRect(rectangleModel.getLeft(), rectangleModel.getTop(), rectangleModel.getRight(), rectangleModel.getBottom(), paint);
+            canvas.drawRect(rectangleModel.left, rectangleModel.top, rectangleModel.right, rectangleModel.bottom, paint);
         }
 
         for (final DrawCallback callback : callbacks) {
@@ -163,13 +160,13 @@ public class DrawView extends View {
         this.sensorOrientation = sensorOrientation;
     }
 
-    public void drawDesireArea(RectangleModel rectangleModel){
+    public void drawDesireArea(RectF rectangleModel){
         this.rectangleModel = rectangleModel;
 
         invalidate();
     }
 
-    public void drawFilledBorder(RectangleModel rtBorder){
+    public void drawFilledBorder(RectF rtBorder){
         this.rtBorder = rtBorder;
 
         invalidate();

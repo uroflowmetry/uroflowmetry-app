@@ -21,6 +21,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.AssetFileDescriptor;
+import android.graphics.RectF;
 import android.hardware.Camera;
 import android.hardware.Camera.Parameters;
 import android.media.CameraProfile;
@@ -52,7 +53,6 @@ import com.uroflowmetry.camera.FocusManager;
 import com.uroflowmetry.camera.FocusManager.Listener;
 import com.uroflowmetry.engine.EngineUroflowmetry;
 import com.uroflowmetry.library.widget.DrawView;
-import com.uroflowmetry.models.RectangleModel;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -60,6 +60,7 @@ import java.util.List;
 
 
 
+@SuppressWarnings("ALL")
 public class MeasureVolumeActivity extends BaseActivity implements
 		SurfaceHolder.Callback, Camera.PreviewCallback, Camera.ShutterCallback,
 		Camera.PictureCallback, Listener, OnTouchListener
@@ -708,15 +709,15 @@ public class MeasureVolumeActivity extends BaseActivity implements
 				refreshCamera(mCameraDevice);
 		}
 
-		RectangleModel rtBorder = new RectangleModel();
+		RectF rtBorder = new RectF();
 		_cropL = width / 6;
 		_cropT = height / 6;
 		_cropR = 5 * width / 6;
 		_cropB = 5 * height / 6;
-		rtBorder.setLeft(_cropL);
-		rtBorder.setTop(_cropT);
-		rtBorder.setRight(_cropR);
-		rtBorder.setBottom(_cropB);
+		rtBorder.left = _cropL;
+		rtBorder.top = _cropT;
+		rtBorder.right = _cropR;
+		rtBorder.bottom = _cropB;
 		drawView.drawFilledBorder(rtBorder);
 
 		// Set preview display if the surface is being created. Preview was
@@ -810,16 +811,16 @@ public class MeasureVolumeActivity extends BaseActivity implements
 						mbProcEngine = false;
 						if (ret == true )
 						{
-							RectangleModel rtModel = new RectangleModel();
+							RectF rtModel = new RectF();
 
 							int left = (int)(position[0] * ratio[0]);
 							int top = (int)(position[1] * ratio[1]);
 							int right = (int)(position[2] * ratio[0]);
 							int bottom = (int)(position[3] * ratio[1]);
-							rtModel.setLeft(left);
-							rtModel.setTop(top);
-							rtModel.setRight(right);
-							rtModel.setBottom(bottom);
+							rtModel.left = left;
+							rtModel.top = top;
+							rtModel.right = right;
+							rtModel.bottom = bottom;
 
 							drawView.drawDesireArea(rtModel);
 

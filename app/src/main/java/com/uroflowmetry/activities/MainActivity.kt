@@ -5,8 +5,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
-import com.itikarus.hat.PermissionCheckActivity
 import com.uroflowmetry.R
+import com.uroflowmetry.base.PermissionCheckActivity
 import com.uroflowmetry.invisiable
 import com.uroflowmetry.visiable
 import ir.sohreco.androidfilechooser.FileChooser
