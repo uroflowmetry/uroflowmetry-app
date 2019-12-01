@@ -4,9 +4,12 @@
   <img src="https://avatars2.githubusercontent.com/u/56993865">
 </p>
 
-## Warning
+## Urloflowmetry-app
 
+<p align="center">
 **WARNING**: This application is currently under active research and development - Do not use for any official medical purposes!
+  </p>
+
 
 [Functional overview of the app](https://docs.google.com/presentation/d/1SuvmlXOPugkAQJiNvBRmmNra03o4eOqbB7jLbiSqh0M/edit?usp=sharing) specifically designed to make a revolutionary, logistic free ICT4D (ICT for Development) technology to support preliminary diagnostic of Urological health issues (es: Prostatic Cancer, etc)
 
