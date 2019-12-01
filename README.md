@@ -15,6 +15,10 @@ This technical cooperation with North Korea's software developers is legally com
 
 * "to suspend scientific and technical cooperation involving persons or groups officially sponsored by or representing the DPRK **except for medical exchanges**"
 
+Here it's possible to download the [Project plan](https://drive.google.com/file/d/1F5VELdtADGFrx5XEjiSiXiP60jQUQty5/view?usp=sharing) that is being developed for this implementation.
+
+To build the prototype, the budget that has been allocated for the open research and development is total of 7.100 (4 months time of a team of 6 persons).
+
 Contact for collaboration and research partnership: info@uroflowmetry.org to attention of Fabio Pietrosanti
 
 ## Other Github Uroflowmetry project
