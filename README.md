@@ -1,5 +1,8 @@
-# uroflowmetry-app
-Uroflowmetry Mobile App using Video Analysis.
+# uroflowmetry
+
+![Uroflowmetry](https://avatars2.githubusercontent.com/u/56993865)
+
+Uroflowmetry Mobile App using Video Analysis an Artificial Intelligence.
 
 [Functional overview of the app](https://docs.google.com/presentation/d/1SuvmlXOPugkAQJiNvBRmmNra03o4eOqbB7jLbiSqh0M/edit?usp=sharing) specifically designed to make a revolutionary, logistic free ICT4D (ICT for Development) technology to support preliminary diagnostic of Urological health issues (es: Prostatic Cancer, etc)
 
