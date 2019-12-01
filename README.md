@@ -16,3 +16,8 @@ This technical cooperation with North Korea's software developers is legally com
 * "to suspend scientific and technical cooperation involving persons or groups officially sponsored by or representing the DPRK **except for medical exchanges**"
 
 Contact for collaboration and research partnership: info@uroflowmetry.org to attention of Fabio Pietrosanti
+
+## Other Github Uroflowmetry project
+Other open projects try to build an hardware uroflowmeters, while that's the first software one:
+* [https://github.com/bgarberman/Uroflow](Uroflow)
+* [https://github.com/rokrodic/uroflow](DIY Uroflow)
