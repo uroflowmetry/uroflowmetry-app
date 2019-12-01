@@ -6,14 +6,6 @@
 
 ## Urloflowmetry-app
 
-<p align="center">
-**WARNING**: 
-  This application is currently under active research and development 
-  - 
-  Do not use for any official medical purposes!
-</p>
-
-
 [Functional overview of the app](https://docs.google.com/presentation/d/1SuvmlXOPugkAQJiNvBRmmNra03o4eOqbB7jLbiSqh0M/edit?usp=sharing) specifically designed to make a revolutionary, logistic free ICT4D (ICT for Development) technology to support preliminary diagnostic of Urological health issues (es: Prostatic Cancer, etc)
 
 Free Software (AGPLv3) project developed by [Advanced Knowledge Ventures](http://www.akventures.eu) (Italy) in an international research medical cooperation with IT Laboratories in North Korea.
@@ -21,6 +13,8 @@ Free Software (AGPLv3) project developed by [Advanced Knowledge Ventures](http:/
 Here it's possible to download the [Project plan](https://drive.google.com/file/d/1F5VELdtADGFrx5XEjiSiXiP60jQUQty5/view?usp=sharing) that is being developed for this implementation. (The detailed project plan has been produced after a couple of months of development).
 
 To build the prototype, the budget that has been allocated for the open research and development is total of 7.100 (4 months of work of a team of 6 persons).
+
+**WARNING**: This application is currently under active research and development - Do not use for any official medical purposes!
 
 Contact for collaboration and research partnership: info@uroflowmetry.org to attention of Fabio Pietrosanti
 
