@@ -1,4 +1,4 @@
-# Uroflowmetry Mobile App using Video Analysis an Artificial Intelligence.
+# Uroflowmetry Mobile App using Video Analysis
 
 <p align="center">
   <img src="https://avatars2.githubusercontent.com/u/56993865">
