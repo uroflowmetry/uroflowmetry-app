@@ -23,5 +23,5 @@ Contact for collaboration and research partnership: info@uroflowmetry.org to att
 
 ## Other Github Uroflowmetry project
 Other open projects try to build an hardware uroflowmeters, while that's the first software one:
-* [https://github.com/bgarberman/Uroflow](Uroflow)
-* [https://github.com/rokrodic/uroflow](DIY Uroflow)
+* [Uroflow](https://github.com/bgarberman/Uroflow)
+* [DIY Uroflow](https://github.com/rokrodic/uroflow)
