@@ -1,5 +1,9 @@
 # uroflowmetry
 
+<p align="center">
+  <img width="460" height="300" src="https://avatars2.githubusercontent.com/u/56993865">
+</p>
+
 ![Uroflowmetry](https://avatars2.githubusercontent.com/u/56993865)
 
 Uroflowmetry Mobile App using Video Analysis an Artificial Intelligence.
