@@ -5,11 +5,19 @@
 
 cmake_minimum_required(VERSION 3.4.1)
 
-include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/opencv/include/ )
+#SET("OpenCV_DIR" "opencv/sdk/native/jni")
+#SET("OpenCV_INCLUDE_DIRS" "opencv/sdk/native/jni/include")
+#find_package(OpenCV REQUIRED)
+#
+#message(STATUS "OpenCV library status:")
+#message(STATUS "    version: ${OpenCV_VERSION}")
+#message(STATUS "    libraries: ${OpenCV_LIBS}")
+#message(STATUS "    include path: ${OpenCV_INCLUDE_DIRS}")
+
+include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/opencv/sdk/native/jni/include/ )
 
 add_library( lib_opencv SHARED IMPORTED )
-set_target_properties(lib_opencv PROPERTIES IMPORTED_LOCATION ${CMAKE_CURRENT_SOURCE_DIR}/opencv/libs/${ANDROID_ABI}/libopencv_java4.so)
-
+set_target_properties(lib_opencv PROPERTIES IMPORTED_LOCATION ${CMAKE_CURRENT_SOURCE_DIR}/opencv/sdk/native/libs/${ANDROID_ABI}/libopencv_java4.so)
 
 add_library( # Sets the name of the library.
         EngineUroflowmetry
@@ -32,6 +40,8 @@ find_library( # Sets the name of the path variable.
 # build script, prebuilt third-party libraries, or system libraries.
 find_library(jnigraphics-lib
         jnigraphics)
+
+
 
 target_link_libraries( # Specifies the target library.
             EngineUroflowmetry

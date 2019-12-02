@@ -51,19 +51,21 @@ public class ImageUtils {
 
     public static void convertYUV420SPToARGB8888(byte[] input, int width, int height, int[] output) {
         final int frameSize = width * height;
-        for (int j = 0, yp = 0; j < height; j++) {
+        for (int j = 0, iyp = 0; j < height; j++) {
             int uvp = frameSize + (j >> 1) * width;
             int u = 0;
             int v = 0;
 
-            for (int i = 0; i < width; i++, yp++) {
-                int y = 0xff & input[yp];
+            int oyp = height - j - 1;
+            for (int i = 0; i < width; i++, iyp++) {
+                int y = 0xff & input[iyp];
                 if ((i & 1) == 0) {
                     v = 0xff & input[uvp++];
                     u = 0xff & input[uvp++];
                 }
 
-                output[yp] = YUV2RGB(y, u, v);
+                output[oyp + i * height] = YUV2RGB(y, u, v);
+                //output[iyp] = YUV2RGB(y, u, v);
             }
         }
     }
@@ -319,8 +321,27 @@ public class ImageUtils {
         return baos.toByteArray();
     }
 
-    public static boolean saveBitmapToFile(Bitmap bitmap, String filePath, Bitmap.CompressFormat format) {
-        return saveBitmapToFile(bitmap, filePath, 75, format);
+    public static boolean saveBitmapInFile(Bitmap bitmap, String fileDir, String fileName, Bitmap.CompressFormat format) {
+        //return saveBitmapToFile(bitmap, filePath, 75, format);
+//        string filePath = Environment.getExternalStorageDirectory().getAbsolutePath() +
+//                "/PhysicsSketchpad";
+        boolean bRet = false;
+        File dir = new File(fileDir);
+        if(!dir.exists())
+            dir.mkdirs();
+
+        try {
+            File file = new File(dir, fileName);
+            FileOutputStream fOut = new FileOutputStream(file);
+
+            bitmap.compress(Bitmap.CompressFormat.PNG, 85, fOut);
+            fOut.flush();
+            fOut.close();
+            bRet = true;
+        }catch (Exception e){
+
+        }
+        return bRet;
     }
 
 

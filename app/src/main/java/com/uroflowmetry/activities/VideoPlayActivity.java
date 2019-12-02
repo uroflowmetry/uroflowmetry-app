@@ -14,15 +14,16 @@ import com.uroflowmetry.engine.EngineUroflowmetry;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
+import java.nio.ByteBuffer;
 
 public class VideoPlayActivity extends MeasureActivity {
 
-    private String filePath;
-    private TextureView videoView;
+    private String mFilePath;
+    private TextureView mTvVideo;
 
     private MediaPlayer mMediaPlayer;
 
-    private Bitmap _bmpFrame = null;
+    private Bitmap mBmpFrame = null;
 
 
     @Override
@@ -34,10 +35,10 @@ public class VideoPlayActivity extends MeasureActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        filePath = getIntent().getStringExtra("filePath");
+        mFilePath = getIntent().getStringExtra("filePath");
 
-        videoView = findViewById(R.id.videoView);
-        videoView.setSurfaceTextureListener(new TextureView.SurfaceTextureListener() {
+        mTvVideo = findViewById(R.id.videoView);
+        mTvVideo.setSurfaceTextureListener(new TextureView.SurfaceTextureListener() {
             @Override
             public void onSurfaceTextureAvailable(SurfaceTexture surfaceTexture, int i, int i1) {
 
@@ -45,7 +46,7 @@ public class VideoPlayActivity extends MeasureActivity {
 
                 try {
                     mMediaPlayer = new MediaPlayer();
-                    mMediaPlayer.setDataSource(VideoPlayActivity.this, Uri.parse(filePath));
+                    mMediaPlayer.setDataSource(VideoPlayActivity.this, Uri.parse(mFilePath));
                     mMediaPlayer.setSurface(surface);
                     mMediaPlayer.setLooping(false);
 
@@ -56,26 +57,29 @@ public class VideoPlayActivity extends MeasureActivity {
                     mMediaPlayer.setOnPreparedListener(mediaPlayer -> {
                         mediaPlayer.start();
 
-                        Bitmap bmFrame = videoView.getBitmap();
+                        Bitmap bmFrame = mTvVideo.getBitmap();
 
                         int frameW = bmFrame.getWidth();
                         int frameH = bmFrame.getHeight();
 
-                        double dScaleX = (double) videoView.getWidth() / (double)frameW;
-                        double dScaleY = (double) videoView.getHeight() / (double)frameH;
+                        double dScaleX = (double) mTvVideo.getWidth() / (double)frameW;
+                        double dScaleY = (double) mTvVideo.getHeight() / (double)frameH;
 
                         double[] ratio = new double[2];
                         ratio[0] = dScaleX;
                         ratio[1] = dScaleY;
 
-                        preInitialize(videoView.getWidth(), videoView.getHeight(), frameW, frameH, ratio, 0);
-                        startWork();
+                        preInitialize(mTvVideo.getWidth(), mTvVideo.getHeight(), frameW, frameH, ratio, 0);
+                        //startWork();
+                        isAvailableToWork = true;
+                        _bProcEngine = false;
 
                         new Thread(){
                             @Override
                             public void run() {
                                 while (isAvailableToWork){
                                     detectBottle();
+                                    //procMeasure_video();
                                     try {
                                         Thread.sleep(50);
                                     } catch (InterruptedException e) {
@@ -119,14 +123,23 @@ public class VideoPlayActivity extends MeasureActivity {
         });
     }
 
-    @Override
-    public Bitmap getBitmapSource() {
-        _bmpFrame = videoView.getBitmap();
-        return _bmpFrame;
-    }
+//    @Override
+//    public byte[] getFrameBitData(){
+//        Bitmap bmpFrame = videoView.getBitmap();
+//        int nWideWidth = bmpFrame.getRowBytes();
+//        int nSize = nWideWidth * bmpFrame.getHeight();
+//
+//        ByteBuffer byteImgData = ByteBuffer.allocate(nSize);
+//        bmpFrame.copyPixelsToBuffer(byteImgData);
+//
+//        byte[] arrayImgData = byteImgData.array();
+//
+//        return arrayImgData;
+//    }
+
     @Override
     public Bitmap getBitmapFrame() {
-        _bmpFrame = videoView.getBitmap();
-        return _bmpFrame;
+        mBmpFrame = mTvVideo.getBitmap();
+        return mBmpFrame;
     }
 }

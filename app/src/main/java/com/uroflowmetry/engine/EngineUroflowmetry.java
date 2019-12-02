@@ -142,9 +142,42 @@ public class EngineUroflowmetry {
         Log.d("Result : ", " ============ bottom : ===========" + position[3] );
         return bRet;
     }
+
+    public static boolean procVideoFrame(Bitmap bmpFrame, int[] position, int cl , int ct, int cr, int cb){
+        boolean bRet = false;
+        int frameW = bmpFrame.getWidth();
+        int frameH = bmpFrame.getHeight();
+        final Bitmap bmpFinal = frameW > frameH? rotateBitmap(bmpFrame, 90) : bmpFrame;
+
+        int nWideWidth = bmpFinal.getRowBytes();
+        int nSize = nWideWidth * bmpFinal.getHeight();
+        ByteBuffer byteImgData = ByteBuffer.allocate(nSize);
+        bmpFinal.copyPixelsToBuffer(byteImgData);
+        byte[] byFrameData = byteImgData.array();
+
+        Log.d("Camera : ", " ============ width : ===========" + bmpFinal.getWidth() );
+        Log.d("Camera : ", " ============ height : ===========" + bmpFinal.getHeight() );
+        Log.d("Crop : ", " ============ crop_l : ===========" + cl );
+        Log.d("Crop : ", " ============ crop_t : ===========" + ct );
+        Log.d("Crop : ", " ============ crop_r : ===========" + cr );
+        Log.d("Crop : ", " ============ crop_b : ===========" + cb );
+        //int[] position = new int[4];
+        bRet = ProcFrameData(byFrameData, bmpFinal.getWidth(), bmpFinal.getHeight(), nWideWidth, position, cl, ct, cr, cb);
+
+        Log.d("Result : ", " ============ left : ===========" + position[0] );
+        Log.d("Result : ", " ============ right : ===========" + position[1] );
+        Log.d("Result : ", " ============ top : ===========" + position[2] );
+        Log.d("Result : ", " ============ bottom : ===========" + position[3] );
+
+        return bRet;
+    }
+
     // byImgData : rgb data, w : image width, h : image hight
     // Return : position[0]-left, postion[1]-top, position[2]-right, position[3]-bottom
     public static native boolean ProcFrame(byte[] byImgData, int w, int h, int[] position, int crop_l, int crop_t, int crop_r, int crop_b);
 
     public static native boolean ProcFrameRGB(byte[] byImgData, int w, int h, int[] position, int crop_l, int crop_t, int crop_r, int crop_b);
+
+
+    public static native boolean ProcFrameData(byte[] byFrameData, int w, int h, int wide_w, int[] position, int crop_l, int crop_t, int crop_r, int crop_b);
 }

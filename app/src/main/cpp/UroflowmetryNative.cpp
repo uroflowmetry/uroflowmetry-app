@@ -1,5 +1,11 @@
 #include "UroflowmetryNative.h"
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <string>
+#include <iostream>
+#include <vector>
+
 //#define LOG_VIEW
 //#define LOG_SAVE
 
@@ -7,10 +13,13 @@
 
 #include <android/log.h>
 
-#include <opencv2/core/core.hpp>
-#include <opencv2/highgui.hpp>
-#include <opencv2/imgproc.hpp>
-#include <opencv2/imgproc/imgproc_c.h>
+//#include <opencv2/core/core.hpp>
+//#include <opencv2/highgui.hpp>
+//#include <opencv2/imgproc.hpp>
+//#include <opencv2/imgproc/imgproc_c.h>
+#include "opencv2/highgui.hpp"
+#include "opencv2/imgproc.hpp"
+#include "opencv2/imgcodecs.hpp"
 
 using namespace std;
 using namespace cv;
@@ -87,12 +96,15 @@ bool getFlowmetry(Mat matIn, Rect &rtBorder, int nMinW, int nMaxW) {
 	vector < vector<Point> > contours;
 	vector < Vec4i > hiera;
 	Mat matContours = matIn.clone();
-	findContours(matContours, contours, hiera, CV_RETR_LIST, CV_CHAIN_APPROX_SIMPLE);
+	findContours(matContours, contours, hiera,  RETR_LIST, CHAIN_APPROX_SIMPLE);//CV_RETR_LIST, CV_CHAIN_APPROX_SIMPLE);
 	matContours.release();
 
 	vector<Rect> vtRtContours;
 	for (int i = 0; i < contours.size(); i++) {
 		Rect rtBounding = boundingRect(contours[i]);
+		double dArea = contourArea(contours[i], false);
+		if( 3 * dArea < rtBounding.width * rtBounding.height )
+            continue;
 		if (rtBounding.x > 50 && rtBounding.y > 50 &&
 			rtBounding.x + rtBounding.width < matIn.size().width - 50 && rtBounding.y + rtBounding.height < matIn.size().height - 50 &&
 			//rtBounding.width > g_nMinBorderW && rtBounding.width < g_nMaxBorderW)
@@ -125,6 +137,7 @@ bool getFlowmetry(Mat matIn, Rect &rtBorder, int nMinW, int nMaxW) {
 }
 
 #define   SCREEN_WIDTH			800
+
 void rgb2gray(unsigned char* pbyImgRGB, int nW, int nH, unsigned char* pbyImgGray)
 {
     int i, j, ii, jj, hh;
@@ -140,6 +153,26 @@ void rgb2gray(unsigned char* pbyImgRGB, int nW, int nH, unsigned char* pbyImgGra
     }
 }
 
+void getGrayData(unsigned char* pbyImgData, int nImgW, int nImgH, int nWideWidth, unsigned char* pbyGrayData){
+
+    unsigned char r, g, b;
+    int iy1, iy2, jx1, jx2;
+    for (int i = 0; i < nImgH; i++) {
+        iy1 = i * nImgW;//3 * nImgW;
+        iy2 = i * nWideWidth;
+        for (int j = 0; j < nImgW; j++) {
+//            jx1 = j * 3;
+            jx2 = j * 4;
+//            byRGB[iy1 + jx1] = pbyImgData[iy2 + jx2 + 2];
+//            byRGB[iy1 + jx1 + 1] = arrayImgData[iy2 + jx2 + 1];
+//            byRGB[iy1 + jx1 + 2] = arrayImgData[iy2 + jx2];
+            r = pbyImgData[iy2 + jx2 + 2];
+            g = pbyImgData[iy2 + jx2 + 1];
+            b = pbyImgData[iy2 + jx2];
+            pbyGrayData[iy1 + j] = ( ( (int)r * 117 + (int)g*601 + (int)b*306 ) >> 10 ) ;
+        }
+    }
+}
 void rotate90(unsigned char* byDataIn, int& width, int& height, unsigned char* byDataOut){
     int inputOffset = 0;
     for (int y = 0; y < height; y++) {
@@ -329,7 +362,7 @@ JNIEXPORT jboolean JNICALL Java_com_uroflowmetry_engine_EngineUroflowmetry_ProcF
 
     LOGD("Engine : =============  cvtColor() start ==================");
     Mat orgGray;
-    cv::cvtColor(imFrameOrigin, orgGray, CV_BGR2GRAY);
+    cv::cvtColor(imFrameOrigin, orgGray, COLOR_BGR2GRAY);
 #ifdef LOG_SAVE
     //cv::imwrite(string("sdcard/Pictures/frame_org.png"), orgGray);
 #endif
@@ -351,4 +384,46 @@ JNIEXPORT jboolean JNICALL Java_com_uroflowmetry_engine_EngineUroflowmetry_ProcF
 
     return bRet;
 }
+
+
+JNIEXPORT jboolean JNICALL Java_com_uroflowmetry_engine_EngineUroflowmetry_ProcFrameData(JNIEnv *env, jobject,
+        jbyteArray byFrameData, jint w, jint h, jint wide_w, jintArray nArrPosition, jint crop_l, jint crop_t, jint crop_r, jint crop_b){
+    jboolean bRet = false;
+    jbyte* pbyImgData = 0;
+    jint pRectData[4];
+
+    memset(pRectData, 0, 4 * sizeof(jint));
+    pbyImgData = env->GetByteArrayElements(byFrameData, 0);
+
+    int size = w * h;
+    unsigned char* pbyGrayData = new unsigned char[size];
+    memset(pbyGrayData, 0, size);
+    getGrayData((unsigned char*)pbyImgData, w, h, wide_w, pbyGrayData);
+
+    LOGD("Engine : =============  EngineUroflowmetry_ProcFrame() start ==================");
+    Mat orgGray = Mat(h, w, CV_8UC1);
+    memcpy(orgGray.data, pbyImgData, size);
+
+#ifdef LOG_SAVE
+    //cv::imwrite(string("sdcard/Pictures/frame_org.png"), orgGray);
+#endif
+
+    LOGD("Engine : ============== Image        width : %d,  height : %d", w, h);
+    LOGD("Engine : ============== Image crop   left : %d, top : %d, right : %d, bottom : %d", crop_l, crop_t, crop_r, crop_b);
+    bRet = ProcMatFrame(orgGray, crop_l, crop_t, crop_r, crop_b, pRectData);
+
+    orgGray.release();
+    delete pbyGrayData; pbyGrayData = nullptr;
+
+    if( bRet == true ) {
+        LOGD("Engine : ============== Result left : %d, top : %d, right : %d, bottom : %d", pRectData[0], pRectData[1], pRectData[2], pRectData[3]);
+
+        env->SetIntArrayRegion(nArrPosition, 0, 4, pRectData);
+    }
+
+    env->ReleaseByteArrayElements(byFrameData, pbyImgData, JNI_ABORT);
+
+    return bRet;
+}
+
 

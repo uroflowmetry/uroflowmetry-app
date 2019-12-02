@@ -59,9 +59,12 @@ class DataActivity : BaseActivity() {
             //mChart.axisLeft.axisMaximum = getMaxValue()
 
             Handler().postDelayed({
+                feedMultiple(0f)
                 values.forEach {
                     feedMultiple(it)
                 }
+                feedMultiple(0f)
+                mChart.moveViewToX(0f)
             }, 1000)
         }
     }
@@ -73,11 +76,9 @@ class DataActivity : BaseActivity() {
         mChart.setOnChartValueSelectedListener(object : OnChartValueSelectedListener {
 
             override fun onNothingSelected() {
-
             }
 
             override fun onValueSelected(e: Entry?, h: Highlight?) {
-
             }
 
         })

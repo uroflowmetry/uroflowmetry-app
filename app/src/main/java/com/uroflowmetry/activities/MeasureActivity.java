@@ -23,9 +23,11 @@ import android.graphics.Matrix;
 import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Message;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Surface;
 import android.widget.TextView;
@@ -48,11 +50,14 @@ import com.uroflowmetry.models.DataModel;
 
 import org.jetbrains.annotations.Nullable;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
 public abstract class MeasureActivity extends BaseActivity {
+
+    public boolean _isVideo = true;
 
     private boolean computingDetection = false;
     private Handler handler;
@@ -74,7 +79,7 @@ public abstract class MeasureActivity extends BaseActivity {
     private Matrix cropToFrameTransform;
     private static final boolean MAINTAIN_ASPECT = false;
 
-    private Bitmap croppedBitmap = null;
+    protected Bitmap mCroppedBitmap = null;
 
     protected DrawView drawView;
     protected int _viewW, _viewH;
@@ -103,6 +108,8 @@ public abstract class MeasureActivity extends BaseActivity {
     private int currentMeasuredHeight = 0;
     private int currentMeasuredWidth = 0;
 
+    private RectF mRtMeasure = new RectF();
+
     private Handler mHandler;
     private TextView infoViewer;
     private final int speedUpdateDuration = 1; // seconds
@@ -128,11 +135,13 @@ public abstract class MeasureActivity extends BaseActivity {
                     float speed = (rateOfRealHeightAndPixel * diffHeight) / speedUpdateDuration;
 
                     if(speed < 0) speed = 0f;
+
                     dataModel.getValues().add(speed);
                     String infoMsg =
                             String.format("Bottle Volume: %dml\n", bottleModel.getVolume()) +
                                     String.format("Filled Volume: %dml\n", voidedVolume) +
                                     String.format("Flow Rate: %.2fml/s", speed);
+
                     infoViewer.setText(infoMsg);
                     lastMeasuredHeight = currentMeasuredHeight;
                     mHandler.sendEmptyMessageDelayed(0, speedUpdateDuration * 1000);
@@ -168,6 +177,7 @@ public abstract class MeasureActivity extends BaseActivity {
     }
 
     protected void preInitialize(int viewW, int viewH, int frameW, int frameH, double[] ratio,  int rotation){
+        Log.d("MeasureActivity", "===== preInitialize() start ====");
         _viewW = viewW;
         _viewH = viewH;
 
@@ -214,24 +224,23 @@ public abstract class MeasureActivity extends BaseActivity {
         }
 
         sensorOrientation = rotation - getScreenOrientation();
-        //LOGGER.i("Camera orientation relative to screen canvas: %d", sensorOrientation);
 
-        //LOGGER.i("Initializing at size %dx%d", previewWidth, previewHeight);
-        //rgbFrameBitmap = Bitmap.createBitmap(previewWidth, previewHeight, Bitmap.Config.ARGB_8888);
-        croppedBitmap = Bitmap.createBitmap(cropSize, cropSize, Bitmap.Config.ARGB_8888);
+        mCroppedBitmap = Bitmap.createBitmap(cropSize, cropSize, Bitmap.Config.ARGB_8888);
 
         frameToCropTransform = ImageUtils.getTransformationMatrix(_frameW, _frameH, cropSize, cropSize, sensorOrientation, MAINTAIN_ASPECT);
-        //frameToCropTransform = ImageUtils.getTransformationMatrix(_viewW, _viewH, cropSize, cropSize, sensorOrientation, MAINTAIN_ASPECT);
 
         cropToFrameTransform = new Matrix();
         frameToCropTransform.invert(cropToFrameTransform);
 
-        //drawView.setFrameConfigurationForBottleDetect(_frameW, _frameH, sensorOrientation);
+        mTimeMeasureS = DateTimeUtils.getTimestamp();
         drawView.setFrameConfigurationForBottleDetect(_frameW, _frameH, sensorOrientation);
     }
 
+    String mTimeMeasureS = "";
+    String mTimeMeasureE = "";
     protected void detectBottle() {
-        //drawView.postInvalidate();
+        detectedBottleArea = null;
+        drawView.postInvalidate();
 
         // No mutex needed as this method is not reentrant.
         if (computingDetection) {
@@ -241,31 +250,74 @@ public abstract class MeasureActivity extends BaseActivity {
 
         computingDetection = true;
 
-        final Canvas canvas = new Canvas(croppedBitmap);
-        canvas.drawBitmap(getBitmapSource(), frameToCropTransform, null);
-        // For examining the actual TF input.
+        final Bitmap bmpFrame = getBitmapFrame();
+        final Canvas canvas = new Canvas(mCroppedBitmap);
+        canvas.drawBitmap(bmpFrame, frameToCropTransform, null);
 
         readyForNextImage();
 
         runInBackground(() -> {
-            final List<Classifier.Recognition> results = detector.recognizeImage(croppedBitmap);
+            final List<Classifier.Recognition> results = detector.recognizeImage(mCroppedBitmap);
 
             final List<Classifier.Recognition> mappedRecognitions = new LinkedList<Classifier.Recognition>();
 
+            boolean bMeasure = false;
+            int[] position = new int[4];
             for (final Classifier.Recognition result : results) {
                 final RectF location = result.getLocation();
                 if (location != null && result.getConfidence() >= MINIMUM_CONFIDENCE_TF_OD_API && result.getTitle().equals("bottle")) {
 
                     cropToFrameTransform.mapRect(location);
-
                     result.setLocation(location);
 
                     //Check if including of marked area
-                    //if(location.top > _cropT && location.left > _cropL && location.right < _cropR && location.bottom < _cropB){
+                    if(location.top > _cropT && location.left > _cropL && location.right < _cropR && location.bottom < _cropB)
+                    {
                         mappedRecognitions.add(result);
                         detectedBottleArea = location;
+
+                        bMeasure = procMeasure_video(bmpFrame, position);
+
                         break; // for getting only 1 bottle
-                    //}
+                    }
+                }
+            }
+
+            if (bMeasure)
+            {
+                int left = (int)(position[0] * _ratio[0]);
+                int top = (int)(position[1] * _ratio[1]);
+                int right = (int)(position[2] * _ratio[0]);
+                int bottom = (int)(position[3] * _ratio[1]);
+                mRtMeasure.left = left;
+                mRtMeasure.top = top;
+                mRtMeasure.right = right;
+                mRtMeasure.bottom = bottom;
+
+                runOnUiThread(() -> drawView.drawDesireArea(mRtMeasure));
+
+                mTimeMeasureS = DateTimeUtils.getTimestamp();
+                if(isStartedMeasuring == MEASURERING_NOT_STAETED){
+                    isStartedMeasuring = MEASURERING_STAETED;
+
+                    dataModel = new DataModel();
+                    dataModel.setMStartedTime(mTimeMeasureS);
+                    runOnUiThread(() -> Toast.makeText(MeasureActivity.this, "Measuring Start", Toast.LENGTH_SHORT).show());
+                    mHandler.sendEmptyMessage(0);
+                }
+
+                if(isStartedMeasuring == MEASURERING_STAETED){
+                    currentMeasuredHeight = bottom - top;
+                    currentMeasuredWidth = right - left;
+                    bottleHeight = (int) (currentMeasuredWidth / bottleModel.getRateOfWH());
+                    dataModel.setMEndedTime(mTimeMeasureS);
+                }
+            }
+            else{
+                mTimeMeasureE = DateTimeUtils.getTimestamp();
+                if( DateTimeUtils.getDifferentMilliSec(mTimeMeasureS, mTimeMeasureE) > 3000 ){
+                    mTimeMeasureS = DateTimeUtils.getTimestamp();
+                    runOnUiThread(() -> drawView.drawDesireArea(null));
                 }
             }
 
@@ -304,102 +356,75 @@ public abstract class MeasureActivity extends BaseActivity {
     protected boolean _bProcEngine = false;
     private final int OFFSET_MARGINE_FOR_AREA = 50;
 
-    protected void startWork(){
+//    protected void startWork(){
+//
+//        isAvailableToWork = true;
+//
+//        new Thread(){
+//            @Override
+//            public void run() {
+//                while (isAvailableToWork){
+//                    //procMeasure_video();
+//                }
+//            }
+//        }.start();
+//
+//    }
 
-        isAvailableToWork = true;
+    protected boolean procMeasure_video(Bitmap bmpFrame, int[] position){
+        boolean bMeasure = false;
+        if( !_bProcEngine) {
+            _bProcEngine = true;
+            int crop_l , crop_t, crop_r, crop_b;
 
-        new Thread(){
-            @Override
-            public void run() {
-                while (isAvailableToWork){
+            if(detectedBottleArea != null){
 
-                    if( !_bProcEngine) {
-
-                        _bProcEngine = true;
-                        int crop_l , crop_t, crop_r, crop_b;
-
-                        if(detectedBottleArea != null){
-
-                            float offsetedPosition = detectedBottleArea.left - OFFSET_MARGINE_FOR_AREA;
-                            if(offsetedPosition < 0){
-                                offsetedPosition = 0;
-                            }
-                            crop_l = (int)(offsetedPosition);// / _ratio[0]);
-
-                            offsetedPosition = detectedBottleArea.top - OFFSET_MARGINE_FOR_AREA;
-                            if(offsetedPosition < 0){
-                                offsetedPosition = 0;
-                            }
-                            crop_t = (int)( offsetedPosition);// / _ratio[1]);
-
-                            offsetedPosition = detectedBottleArea.right + OFFSET_MARGINE_FOR_AREA;
-                            if(offsetedPosition >= _frameW){
-                                offsetedPosition = _frameW - 5;
-                            }
-                            crop_r = (int)(offsetedPosition);// / _ratio[0]);
-
-                            offsetedPosition = detectedBottleArea.bottom + OFFSET_MARGINE_FOR_AREA;
-                            if(offsetedPosition >= _frameH){
-                                offsetedPosition = _frameH - 5;
-                            }
-                            crop_b = (int)(offsetedPosition);// / _ratio[1]);
-
-                            Bitmap bmpFrame = getBitmapFrame();
-                            int cl, ct, cr, cb;
-                            if( _frameW > _frameH ){
-                                cl = _frameH - crop_b;
-                                ct = crop_l;
-                                cr = _frameH - crop_t;
-                                cb = crop_r;
-                            }
-                            else{
-                                cl = crop_l;
-                                ct = crop_t;
-                                cr = crop_r;
-                                cb = crop_b;
-                            }
-
-                            int[] position = new int[4];
-                            boolean bRet = EngineUroflowmetry.doRunDataRGB(bmpFrame, position, cl, ct, cr, cb);
-
-                            if (bRet)
-                            {
-                                RectF rtModel = new RectF();
-
-                                int left = (int)(position[0] * _ratio[0]);
-                                int top = (int)(position[1] * _ratio[1]);
-                                int right = (int)(position[2] * _ratio[0]);
-                                int bottom = (int)(position[3] * _ratio[1]);
-                                rtModel.left = left;
-                                rtModel.top = top;
-                                rtModel.right = right;
-                                rtModel.bottom = bottom;
-
-                                runOnUiThread(() -> drawView.drawDesireArea(rtModel));
-
-                                if(isStartedMeasuring == MEASURERING_NOT_STAETED){
-                                    isStartedMeasuring = MEASURERING_STAETED;
-
-                                    dataModel = new DataModel();
-                                    dataModel.setMStartedTime(DateTimeUtils.getTimestamp());
-                                    runOnUiThread(() -> Toast.makeText(MeasureActivity.this, "Measuring Start", Toast.LENGTH_SHORT).show());
-                                    mHandler.sendEmptyMessage(0);
-                                }
-
-                                if(isStartedMeasuring == MEASURERING_STAETED){
-                                    currentMeasuredHeight = bottom - top;
-                                    currentMeasuredWidth = right - left;
-                                    bottleHeight = (int) (currentMeasuredWidth / bottleModel.getRateOfWH());
-                                    dataModel.setMEndedTime(DateTimeUtils.getTimestamp());
-                                }
-                            }
-                        }
-                        _bProcEngine = false;
-                    }
+                float offsetedPosition = detectedBottleArea.left - OFFSET_MARGINE_FOR_AREA;
+                if(offsetedPosition < 0){
+                    offsetedPosition = 0;
                 }
-            }
-        }.start();
+                crop_l = (int)(offsetedPosition);// / _ratio[0]);
 
+                offsetedPosition = detectedBottleArea.top - OFFSET_MARGINE_FOR_AREA;
+                if(offsetedPosition < 0){
+                    offsetedPosition = 0;
+                }
+                crop_t = (int)( offsetedPosition);// / _ratio[1]);
+
+                offsetedPosition = detectedBottleArea.right + OFFSET_MARGINE_FOR_AREA;
+                if(offsetedPosition >= _frameW){
+                    offsetedPosition = _frameW - 5;
+                }
+                crop_r = (int)(offsetedPosition);// / _ratio[0]);
+
+                offsetedPosition = detectedBottleArea.bottom + OFFSET_MARGINE_FOR_AREA;
+                if(offsetedPosition >= _frameH){
+                    offsetedPosition = _frameH - 5;
+                }
+                crop_b = (int)(offsetedPosition);// / _ratio[1]);
+
+                //Bitmap bmpFrame = getBitmapFrame();
+                //byte[] byFrameData = getFrameBitData();
+                int cl, ct, cr, cb;
+                if( _frameW > _frameH ){
+                    cl = _frameH - crop_b;
+                    ct = crop_l;
+                    cr = _frameH - crop_t;
+                    cb = crop_r;
+                }
+                else{
+                    cl = crop_l;
+                    ct = crop_t;
+                    cr = crop_r;
+                    cb = crop_b;
+                }
+
+                bMeasure = EngineUroflowmetry.doRunDataRGB(bmpFrame, position, cl, ct, cr, cb);
+            }
+            _bProcEngine = false;
+        }
+
+        return bMeasure;
     }
 
     protected void endWork(){
@@ -416,5 +441,4 @@ public abstract class MeasureActivity extends BaseActivity {
     }
 
     public abstract Bitmap getBitmapFrame();
-    public abstract Bitmap getBitmapSource();
 }

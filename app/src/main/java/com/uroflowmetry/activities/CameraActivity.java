@@ -41,6 +41,7 @@ import android.view.View.OnTouchListener;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import java.util.Collections;
 import java.util.List;
@@ -59,11 +60,6 @@ public class CameraActivity extends MeasureActivity implements
 		SurfaceHolder.Callback, Camera.PreviewCallback, Camera.ShutterCallback,
 		Camera.PictureCallback, Listener, OnTouchListener
 {
-	protected Camera mCameraDevice;
-	// The first rear facing camera
-	Parameters 	mParameters;
-	private Parameters mInitialParams;
-	SurfaceHolder mSurfaceHolder;
 
 	private static final int PREVIEW_STOPPED = 0;
 	protected static final int IDLE = 1; // preview is active
@@ -72,6 +68,13 @@ public class CameraActivity extends MeasureActivity implements
 	private static final int SNAPSHOT_IN_PROGRESS = 3;
 	private static final int SELFTIMER_COUNTING = 4;
 	protected static final int SAVING_PICTURES = 5;
+
+	protected Camera mCameraDevice;
+	// The first rear facing camera
+	Parameters 	mParameters;
+	private Parameters mInitialParams;
+	SurfaceHolder mSurfaceHolder;
+
 	private int mCameraState = PREVIEW_STOPPED;
 
 	private static boolean LOGV = true;
@@ -106,7 +109,8 @@ public class CameraActivity extends MeasureActivity implements
 	// This handles everything about focus.
 	FocusManager mFocusManager;
 
-	ImageView uiFlashButton;
+	ImageView _ivFlashButton;
+	//ImageView ivPreviewText; // testing image
 	private View mPreviewFrame; // Preview frame area for SurfaceView.
 
 	public boolean mbProcEngine = false;
@@ -121,10 +125,8 @@ public class CameraActivity extends MeasureActivity implements
 	final Handler mHandler = new MainHandler();
 
 	private boolean isPreviewStarted = false;
-	private byte[] cameraData;
-	private Bitmap _bmpFrame = null;
-	private Bitmap _bmpSource = null;
-	private int[] rgbBytes = null;
+	private Bitmap mBmpFrame = null;
+	private int[] mBytesRGB = null;
 	private Runnable postInferenceCallback;
 	private Runnable imageConverter;
 
@@ -318,8 +320,10 @@ public class CameraActivity extends MeasureActivity implements
 
 		mPreviewFrame = findViewById(R.id.camera_preview);
 		mPreviewFrame.setOnTouchListener(this);
-		uiFlashButton = findViewById(R.id.button_flash);
-		uiFlashButton.setOnClickListener(new View.OnClickListener() {
+
+		//ivPreviewText = findViewById(R.id.bitmapPreview);
+		_ivFlashButton = findViewById(R.id.button_flash);
+		_ivFlashButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				turnOnFlashligh(true);
@@ -464,7 +468,7 @@ public class CameraActivity extends MeasureActivity implements
 				{
 					mParameters.setFlashMode(Parameters.FLASH_MODE_TORCH);
 					mCameraDevice.setParameters(mParameters);
-					uiFlashButton.setImageResource(R.drawable.flash_off);
+					_ivFlashButton.setImageResource(R.drawable.flash_off);
 				}
 			};
 			handler.sendEmptyMessageAtTime(0, 500);
@@ -472,7 +476,7 @@ public class CameraActivity extends MeasureActivity implements
 		}
 		else
 		{
-			uiFlashButton.setImageResource(R.drawable.flash_on);
+			_ivFlashButton.setImageResource(R.drawable.flash_on);
 		}
 
 		autoFocus();
@@ -710,19 +714,22 @@ public class CameraActivity extends MeasureActivity implements
 			isPreviewStarted = true;
 			final int realViewW = mPreviewFrame.getWidth();
 			final int realViewH = mPreviewFrame.getHeight();
-			final int widthFrame = camera.getParameters().getPreviewSize().width;
-			final int heightFrame = camera.getParameters().getPreviewSize().height;
+			int widthFrame = camera.getParameters().getPreviewSize().width;
+			int heightFrame = camera.getParameters().getPreviewSize().height;
+			if( widthFrame > heightFrame ){
+				int temp = widthFrame;
+				widthFrame = heightFrame;
+				heightFrame = temp;
+			}
 
 			double[] ratio = CameraUtil.getPreviewRatio(mPreviewFrame, mParameters);
-			preInitialize(realViewW, realViewH, widthFrame, heightFrame, ratio, 90);
-			//preInitialize(realViewW, realViewH, widthFrame, heightFrame, ratio, getScreenOrientation());
+			preInitialize(realViewW, realViewH, widthFrame, heightFrame, ratio, 0);//90);
 
-			_bmpSource = Bitmap.createBitmap(widthFrame, heightFrame, Bitmap.Config.ARGB_8888);
-			rgbBytes = new int[widthFrame * heightFrame];
+			mBmpFrame = Bitmap.createBitmap(widthFrame, heightFrame, Bitmap.Config.ARGB_8888);
+			mBytesRGB = new int[widthFrame * heightFrame];
 
-			Log.d("CameraActivity : ", "=============== startWork() ============");
-
-			startWork();
+			//Log.d("CameraActivity : ", "=============== startWork() ============");
+			//startWork();
 		}
 
 		if (isProcessingFrame) {
@@ -730,13 +737,13 @@ public class CameraActivity extends MeasureActivity implements
 			return;
 		}
 
-		cameraData = data;
+		isProcessingFrame = true;
 
 		imageConverter =
 				new Runnable() {
 					@Override
 					public void run() {
-						ImageUtils.convertYUV420SPToARGB8888(cameraData, _frameW, _frameH, rgbBytes);
+						ImageUtils.convertYUV420SPToARGB8888(data, _frameH, _frameW, mBytesRGB);
 					}
 				};
 
@@ -744,11 +751,13 @@ public class CameraActivity extends MeasureActivity implements
 				new Runnable() {
 					@Override
 					public void run() {
-						camera.addCallbackBuffer(cameraData);
+						camera.addCallbackBuffer(data);
 						isProcessingFrame = false;
 					}
 				};
+
 		detectBottle();
+		//ivPreviewText.setImageBitmap(getBitmapFrame()); //testing image
 
 		mHandler.sendMessageDelayed(mHandler.obtainMessage(TRIGER_RESTART_RECOG),TRIGER_RESTART_RECOG_DELAY);
 	}
@@ -944,12 +953,12 @@ public class CameraActivity extends MeasureActivity implements
 		//if(bOn)
 		{
 			mParameters.setFlashMode(Parameters.FLASH_MODE_TORCH);
-			uiFlashButton.setImageResource(R.drawable.flash_off);
+			_ivFlashButton.setImageResource(R.drawable.flash_off);
 		}
 		else
 		{
 			mParameters.setFlashMode(Parameters.FLASH_MODE_OFF);
-			uiFlashButton.setImageResource(R.drawable.flash_on);
+			_ivFlashButton.setImageResource(R.drawable.flash_on);
 		}
 
 		mCameraDevice.setParameters(mParameters);
@@ -967,20 +976,13 @@ public class CameraActivity extends MeasureActivity implements
 	}
 
 	@Override
-	public Bitmap getBitmapSource() {
-		_bmpSource.setPixels(getRgbBytes(), 0, _frameW, 0, 0, _frameW, _frameH);
-		return _bmpSource;
-	}
-
-	@Override
 	public Bitmap getBitmapFrame() {
-		_bmpSource.setPixels(getRgbBytes(), 0, _frameW, 0, 0, _frameW, _frameH);
-		_bmpFrame = _bmpSource.getWidth() > _bmpSource.getHeight()? rotateBitmap(_bmpSource, 90) : _bmpSource;
-		return _bmpFrame;
+		mBmpFrame.setPixels(getRgbBytes(), 0, _frameW, 0, 0, _frameW, _frameH);
+		return mBmpFrame;
 	}
 
 	protected int[] getRgbBytes() {
 		imageConverter.run();
-		return rgbBytes;
+		return mBytesRGB;
 	}
 }

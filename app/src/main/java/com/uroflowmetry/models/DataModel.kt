@@ -19,12 +19,12 @@ class DataModel {
 
 
     fun getStartedTimeString() : String {
-        return DateTimeUtils.convertFormat(DateTimeUtils.FMT_TIMESTAMP, "yyyy/mm/dd HH:mm:ss", mStartedTime)
+        return DateTimeUtils.convertFormat(DateTimeUtils.FMT_TIMESTAMP, "yyyy/MM/dd HH:mm:ss", mStartedTime)
     }
 
 
     fun getEndTimeString() : String {
-        return DateTimeUtils.convertFormat(DateTimeUtils.FMT_TIMESTAMP, "yyyy/mm/dd HH:mm:ss", mEndedTime)
+        return DateTimeUtils.convertFormat(DateTimeUtils.FMT_TIMESTAMP, "yyyy/MM/dd HH:mm:ss", mEndedTime)
     }
 
 
