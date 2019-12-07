@@ -4,18 +4,22 @@
     android:id="@+id/activity_splash"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ffffff"
+    android:background="@drawable/bg_start"
     tools:context="com.uroflowmetry.activities.SplashActivity">
 
     <RelativeLayout
-        android:layout_width="480dp"
+        android:layout_width="wrap_content"
         android:layout_centerInParent="true"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:paddingLeft="50dp"
+        android:paddingRight="50dp"
+        android:paddingBottom="80dp">
         <ImageView
-            android:layout_width="480dp"
-            android:layout_height="400dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:id="@+id/imgLogoTipo"
             android:layout_centerHorizontal="true"
-            android:src="@drawable/splash_logo"/>
+            android:src="@drawable/splash_logo"
+            android:adjustViewBounds="true"/>
     </RelativeLayout>
 </RelativeLayout>

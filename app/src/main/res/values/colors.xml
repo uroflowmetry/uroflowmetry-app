@@ -44,4 +44,6 @@
     <color name="tab_label_color_selected">#FFFFFF</color>
     <color name="tab_label_color_unselected">#adacad</color>
     <color name="gray_line_color">#dfdfdf</color>
+
+    <color name="progress_dlg_bg">@color/dark_orange</color>
 </resources>

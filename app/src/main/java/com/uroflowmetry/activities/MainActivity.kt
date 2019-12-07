@@ -59,12 +59,13 @@ class MainActivity : PermissionCheckActivity() {
             }
         }
 
-        arrayOf(btnData, btnProfile, btnVolume).forEach {
+        arrayOf(btnData, btnProfile, btnVolume, btnSendToDoctor).forEach {
             it.setOnClickListener { view ->
                 when(view.id){
                     R.id.btnData -> startActivity(DataActivity::class.java)
                     R.id.btnProfile -> startActivity(ProfileActivity::class.java)
                     R.id.btnVolume -> startActivity(VolumeActivity::class.java)
+                    R.id.btnSendToDoctor -> startActivity(LoginActivity::class.java)
                 }
             }
         }

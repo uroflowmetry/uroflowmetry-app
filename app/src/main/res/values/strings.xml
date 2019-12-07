@@ -3,4 +3,33 @@
     <string name="cannot_connect_camera">Can not connect the camera</string>
     <string name="tips">Hold card here.\nIt will scan actomatically.</string>
     <string name="camera_disabled">disabled the camera</string>
+
+    <string name="title_login">Login</string>
+    <string name="btn_have_account">Have an account?</string>
+    <string name="btn_have_not_account">Haven\'t an account?</string>
+    <string name="msg_err_login_failed">Invalid account.</string>
+    <string name="error_field_required">This field is required</string>
+    <string name="error_retype_password">Not same password</string>
+    <string name="prompt_userid">USERID</string>
+    <string name="lbl_password">PASSWORD</string>
+    <string name="btn_login_send">Login &amp; Send</string>
+    <string name="lbl_re_password">RETYPE PASSWORD</string>
+
+
+    <string name="msg_err_request">Connection error.</string>
+    <string name="msg_err_response">Format error.</string>
+    <string name="msg_err_failed">Failed.</string>
+    <string name="msg_err_permission">Not allowed permissions.</string>
+    <string name="msg_success_register">Successfully registered.</string>
+
+
+    <!-- signup -->
+    <string name="title_signup">Sign Up</string>
+    <string name="lbl_personal_information">Personal Information</string>
+    <string name="lbl_username">NAME</string>
+    <string name="lbl_userid">USERID</string>
+    <string name="lbl_phonenumber">PHONE NUMBER</string>
+    <string name="lbl_useremail">EMAIL</string>
+    <string name="lbl_code">CODE</string>
+    <string name="btn_next">NEXT</string>
 </resources>

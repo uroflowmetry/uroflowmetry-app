@@ -119,6 +119,7 @@
                     />
             </RelativeLayout>
             <TextView
+                    android:id="@+id/btnSendToDoctor"
                 android:gravity="center"
                 android:textColor="@color/white"
                 android:text="Send to doctor"
