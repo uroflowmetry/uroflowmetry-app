@@ -30,6 +30,8 @@ Several other research has been done in leveraging Acoustic analysis for uroflow
 * [A novel mobile uroflowmetry application for assessing low urinary tract symptoms](https://www.ics.org/2018/abstract/175)
 * [Comparison of sound-based urinary flow prediction methods and validation with a large clinical sample](https://snucm.elsevierpure.com/en/publications/comparison-of-sound-based-urinary-flow-prediction-methods-and-val)
 * [MenHealth commercial Acoustic Uroflowmetry App](https://www.menhealth.me/solution)
+* [SUFU 2019: A Novel Mobile Uroflowmetry Application For Assessing Lower Urinary Tract Symptoms](https://www.urotoday.com/conference-highlights/sufu-winter-meeting-2019/110643-sufu-2019-a-novel-mobile-uroflowmetry-application-for-assessing-lower-urinary-tract-symptoms.html)
+
 
 
 ## Legal Compliance
