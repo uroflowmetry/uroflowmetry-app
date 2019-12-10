@@ -25,6 +25,15 @@ Other open projects try to build an hardware uroflowmeters, while that's the fir
 * [Uroflow](https://github.com/bgarberman/Uroflow)
 * [DIY Uroflow](https://github.com/rokrodic/uroflow)
 
+## Other Software Uroflowmetry research
+Several other research has been done in leveraging Acoustic analysis for uroflowmetry, reasonable next step of evaluation of Uroflowmeter. Below the interesting research resources about Acoustic Analysis for uroflowmetry.
+* [A novel mobile uroflowmetry application for assessing low urinary tract symptoms](https://www.ics.org/2018/abstract/175)
+* [Comparison of sound-based urinary flow prediction methods and validation with a large clinical sample](https://snucm.elsevierpure.com/en/publications/comparison-of-sound-based-urinary-flow-prediction-methods-and-val)
+* [MenHealth commercial Acoustic Uroflowmetry App](https://www.menhealth.me/solution)
+* [SUFU 2019: A Novel Mobile Uroflowmetry Application For Assessing Lower Urinary Tract Symptoms](https://www.urotoday.com/conference-highlights/sufu-winter-meeting-2019/110643-sufu-2019-a-novel-mobile-uroflowmetry-application-for-assessing-lower-urinary-tract-symptoms.html)
+
+
+
 ## Legal Compliance
 
 This technical cooperation with North Korea's software developers is legally compliant with any regulatory restrictive measures applied by European Union as stated by [United Nations Security Council resolution (UNSCR) 2321 adopted on 30 November 2016](https://www.consilium.europa.eu/en/press/press-releases/2017/02/27/north-korea-sanctions/) as it related to **medical exchanges** :
