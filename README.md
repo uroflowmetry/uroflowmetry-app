@@ -14,7 +14,9 @@ Here it's possible to download the [Project plan](https://drive.google.com/file/
 
 To build the prototype, the budget that has been allocated for the open research and development is total of 7.100 EUR (4 months of work of a team of 6 persons).
 
-Source code available on [uroflowmetry-app Github Repository](https://github.com/uroflowmetry/uroflowmetry-app) .
+Source code available for*
+* [Mobile Uroflowmetry app Github Repository](https://github.com/uroflowmetry/uroflowmetry-app) 
+* [Server Uroflowmetry app Github Repository](https://github.com/uroflowmetry/uroflowmetry-server)
 
 **WARNING**: This application is currently under active research and development - Do not use for any official medical purposes!
 
